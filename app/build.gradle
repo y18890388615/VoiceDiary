@@ -30,8 +30,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation files('C:/Users/Administrator/AndroidStudioProjects/VoiceDiary/libs/Msc.jar')
-
+    implementation files('src/libs/XX.jar')
     //权限
     implementation 'com.hjq:xxpermissions:6.2'
 

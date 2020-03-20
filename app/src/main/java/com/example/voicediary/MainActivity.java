@@ -17,7 +17,6 @@ import com.hjq.permissions.OnPermission;
 import com.hjq.permissions.XXPermissions;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.InitListener;
-import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
