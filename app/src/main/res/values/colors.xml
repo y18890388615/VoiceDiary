@@ -3,4 +3,33 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="color_dark">#263238</color>
+    <color name="color_dark_light">#455A64</color>
+    <color name="color_light">#ECEFF1</color>
+    <color name="color_red">#FF5722</color>
+    <color name="color_orange">#FF9800</color>
+    <color name="color_yellow">#FFC107</color>
+    <color name="color_green">#3FB830</color>
+    <color name="color_blue">#00BAED</color>
+    <color name="color_white">#ffffff</color>
+    <color name="dial_red">#ff0000</color>
+    <color name="dial_green">#FF00FF00</color>
+    <color name="dial_yellow">#fcdc21</color>
+    <color name="dial_orange">#f15a24</color>
+    <color name="dial_background">#4DE6E6E6</color>
+
+    <color name="gray">#E1E1E1</color>
+    <color name="darkgray">#727272</color>
+    <color name="simgray">#9A9A9A</color>
+    <color name="lightgray">#BDC4CE</color>
+    <color name="textgray">#8C9198</color>
+    <color name="text_purple">#800073</color>
+    <color name="text_purple2">#B56BAD</color>
+    <color name="text_black">#333333</color>
+    <color name="linegray">#ff707070</color>
+    <color name="transparentwhite">#B3ffffff</color>
+    <color name="black">#000000</color>
+    <color name="line_darkgrey">#CCCCCC</color>
+    <color name="text_gary2">#999999</color>
 </resources>
