@@ -23,7 +23,7 @@ android {
     }
     greendao {
         schemaVersion 1 //当前数据库版本
-        daoPackage "com.db" // 设置DaoMaster、DaoSession、Dao 包名
+        daoPackage "com.ysy.voicediary.db" // 设置DaoMaster、DaoSession、Dao 包名
     }
 }
 
@@ -34,6 +34,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'com.android.support:recyclerview-v7:25.1.0'
+    //noinspection GradleCompatible
     implementation files('src/libs/Msc.jar')
     //权限
     implementation 'com.hjq:xxpermissions:6.2'
@@ -47,4 +49,16 @@ dependencies {
 
     //数据库GreenDao
     implementation 'org.greenrobot:greendao:3.2.2'
+
+    //GreenDao升级
+    implementation 'io.github.yuweiguocn:GreenDaoUpgradeHelper:v2.2.1'
+
+    //tab框架
+    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+
+    //BaseAdapterHelper
+    api 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47-androidx'
+
+    //EasySwipeMenuLayout
+    api 'com.github.anzaizai:EasySwipeMenuLayout:1.1.4'
 }
