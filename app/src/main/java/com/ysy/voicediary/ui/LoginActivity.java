@@ -70,8 +70,6 @@ public class LoginActivity extends BaseActivity {
                     } else {
                         etPwd.setTransformationMethod(HideReturnsTransformationMethod.getInstance());//可见
                     }
-
-
                 }
                 return false;
             }

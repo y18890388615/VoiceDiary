@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity {
 //                    ret = mIat.startListening(mRecognizerListener);
                     if (ret != ErrorCode.SUCCESS) {
                         ToastUtils.showShort("听写失败,错误码：" + ret + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案");
-                        LogUtils.d("test1","听写失败,错误码：" + ret + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案");
+                        LogUtils.d("test1", "听写失败,错误码：" + ret + ",请点击网址https://www.xfyun.cn/document/error-code查询解决方案");
                     } else {
                         ToastUtils.showShort("请开始说话");
                     }
@@ -187,7 +187,7 @@ public class MainActivity extends BaseActivity {
                 resultBuffer.append(mIatResults.get(key));
             }
 
-            edInput.setText(resultBuffer.toString());
+            edInput.setText(edInput.getText().toString() + resultBuffer.toString());
             edInput.setSelection(edInput.length());
         }
 
