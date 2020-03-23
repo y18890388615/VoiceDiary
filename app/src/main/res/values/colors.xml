@@ -32,4 +32,5 @@
     <color name="black">#000000</color>
     <color name="line_darkgrey">#CCCCCC</color>
     <color name="text_gary2">#999999</color>
+    <color name="bg_simpleGray">#f7f8f9</color>
 </resources>

@@ -34,19 +34,19 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="输入手机号"
+        android:layout_marginTop="106dp"
+        android:text="输入账号"
         android:inputType="phone"
         android:textColor="@color/black"
         android:textSize="@dimen/sp_16" />
 
     <EditText
-        android:id="@+id/et_phoneNum"
+        android:id="@+id/et_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
         android:background="@null"
-        android:hint="请输入你的手机号"
+        android:hint="请输入你的账号"
         android:inputType="phone" />
 
     <View
@@ -78,39 +78,6 @@
         android:layout_height="2dp"
         android:layout_marginTop="5dp"
         android:background="@color/line_darkgrey" />
-    <TextView
-        android:id="@+id/tv_authCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:text="输入验证码"
-        android:textColor="@color/black"
-        android:textSize="@dimen/sp_16"
-        android:visibility="gone" />
-
-    <RelativeLayout
-        android:id="@+id/re_autoCode"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <EditText
-            android:id="@+id/et_code"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:background="@null"
-            android:hint="输入验证码"
-            android:inputType="number"
-            android:maxLength="4" />
-        <View
-            android:layout_width="150dp"
-            android:layout_height="2dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginTop="5dp"
-            android:background="@color/line_darkgrey" />
-    </RelativeLayout>
 
 
     <LinearLayout
