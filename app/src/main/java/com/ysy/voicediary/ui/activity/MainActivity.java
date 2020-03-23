@@ -90,6 +90,8 @@ public class MainActivity extends BaseActivity {
             edInput.setText(diaryBean.getContent());
             updateTime.setText(TimeUtils.millis2String(diaryBean.getUpdate_time()));
             tvTextLength.setText(diaryBean.getContent().length()+"字");
+        }else{
+            updateTime.setText(TimeUtils.getNowString());
         }
         edInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -99,7 +101,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                tvTextLength.setText(count + "字");
+                tvTextLength.setText(s.length() + "字");
             }
 
             @Override
@@ -143,7 +145,6 @@ public class MainActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.bt_record:
                 buffer.setLength(0);
-                edInput.setText(null);// 清空显示内容
                 // 设置参数
                 setParam();
                 boolean isShowDialog = true;
@@ -164,20 +165,30 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.bt_complete://完成
-                if (etTitle.getText().length() < 0) {
+                if (etTitle.getText().length() == 0) {
                     ToastUtils.showShort("请填写标题");
                     return;
                 }
-                if (edInput.getText().length() < 0) {
+                if (edInput.getText().length() == 0) {
                     ToastUtils.showShort("请填写内容");
                     return;
                 }
-                DiaryBean diaryBean = new DiaryBean();
-                diaryBean.setTitle(etTitle.getText().toString());
-                diaryBean.setContent(edInput.getText().toString());
-                diaryBean.setType(diary_type);
-                diaryBean.setUpdate_time(TimeUtils.getNowMills());
-                DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().insert(diaryBean);
+                if(getIntent().getLongExtra(Constants.UPDATE_ID,-1) != -1){
+                    DiaryBean diaryBean = new DiaryBean();
+                    diaryBean.setDiaryId(diary_id);
+                    diaryBean.setTitle(etTitle.getText().toString());
+                    diaryBean.setContent(edInput.getText().toString());
+                    diaryBean.setType(diary_type);
+                    diaryBean.setUpdate_time(TimeUtils.getNowMills());
+                    DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().update(diaryBean);
+                }else{
+                    DiaryBean diaryBean = new DiaryBean();
+                    diaryBean.setTitle(etTitle.getText().toString());
+                    diaryBean.setContent(edInput.getText().toString());
+                    diaryBean.setType(diary_type);
+                    diaryBean.setUpdate_time(TimeUtils.getNowMills());
+                    DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().insert(diaryBean);
+                }
                 finish();
                 break;
         }
@@ -237,7 +248,6 @@ public class MainActivity extends BaseActivity {
             }
 
             edInput.setText(edInput.getText().toString() + resultBuffer.toString());
-            edInput.setSelection(edInput.length());
         }
 
         /**

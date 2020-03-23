@@ -52,7 +52,7 @@ public class DiaryListActivity extends BaseActivity {
     @Override
     public void initData() {
         //获取进来的是什么日记列表
-        diary_type = getIntent().getIntExtra(Constants.DIARY_TYPE, 0);
+        diary_type = getIntent().getIntExtra(Constants.DIARY_TYPE, diary_type);
         diaryBeanDao = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao();
         List<DiaryBean> diaryBeans = diaryBeanDao.loadAll();
         for (int i = 0; i < diaryBeans.size(); i++) {
@@ -71,5 +71,19 @@ public class DiaryListActivity extends BaseActivity {
                 startActivity(new Intent(this, MainActivity.class).putExtra(Constants.DIARY_TYPE, diary_type));
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        diaryList.clear();
+        diaryBeanDao = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao();
+        List<DiaryBean> diaryBeans = diaryBeanDao.loadAll();
+        for (int i = 0; i < diaryBeans.size(); i++) {
+            if (diary_type == diaryBeans.get(i).getType()) {
+                diaryList.add(diaryBeans.get(i));
+            }
+        }
+        diaryAdapter.notifyDataSetChanged();
     }
 }

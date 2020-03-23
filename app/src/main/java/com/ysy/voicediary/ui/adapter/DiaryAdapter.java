@@ -1,6 +1,5 @@
 package com.ysy.voicediary.ui.adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.View;
 
@@ -13,15 +12,17 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.ysy.voicediary.Constants;
 import com.ysy.voicediary.R;
 import com.ysy.voicediary.bean.DiaryBean;
+import com.ysy.voicediary.ui.activity.DiaryListActivity;
 import com.ysy.voicediary.ui.activity.MainActivity;
+import com.ysy.voicediary.utils.DataBaseUtil;
 
 import java.util.List;
 
 public class DiaryAdapter extends BaseQuickAdapter<DiaryBean, BaseViewHolder> {
-    private Context context;
-    public DiaryAdapter(int layoutResId, @Nullable List<DiaryBean> data, Context context) {
+    private DiaryListActivity activity;
+    public DiaryAdapter(int layoutResId, @Nullable List<DiaryBean> data, DiaryListActivity activity) {
         super(layoutResId, data);
-        this.context = context;
+        this.activity = activity;
     }
 
     @Override
@@ -31,8 +32,15 @@ public class DiaryAdapter extends BaseQuickAdapter<DiaryBean, BaseViewHolder> {
         helper.setOnClickListener(R.id.content, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, MainActivity.class).
+                activity.startActivity(new Intent(activity, MainActivity.class).
                         putExtra(Constants.DIARY_TYPE, item.getType()).putExtra(Constants.UPDATE_ID, item.getDiaryId()));
+            }
+        });
+        helper.setOnClickListener(R.id.tv_delete, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().delete(item);
+                activity.onResume();
             }
         });
     }
