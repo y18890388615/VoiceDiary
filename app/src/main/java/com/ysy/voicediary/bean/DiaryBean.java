@@ -12,15 +12,17 @@ public class DiaryBean {
     private long update_time;
     private int type;
     private String title;
+    private int priority;//优先级
 
-    @Generated(hash = 149151071)
+    @Generated(hash = 1195311674)
     public DiaryBean(Long diaryId, String content, long update_time, int type,
-            String title) {
+            String title, int priority) {
         this.diaryId = diaryId;
         this.content = content;
         this.update_time = update_time;
         this.type = type;
         this.title = title;
+        this.priority = priority;
     }
 
     @Generated(hash = 1749744078)
@@ -65,6 +67,14 @@ public class DiaryBean {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
 }

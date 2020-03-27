@@ -186,6 +186,7 @@ public class MainActivity extends BaseActivity {
                     diaryBean.setTitle(etTitle.getText().toString());
                     diaryBean.setContent(edInput.getText().toString());
                     diaryBean.setType(diary_type);
+                    diaryBean.setPriority(0);
                     diaryBean.setUpdate_time(TimeUtils.getNowMills());
                     DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().insert(diaryBean);
                 }

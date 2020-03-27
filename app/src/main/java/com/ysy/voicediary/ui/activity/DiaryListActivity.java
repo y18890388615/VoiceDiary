@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.umeng.socialize.UMShareAPI;
 import com.ysy.voicediary.Constants;
 import com.ysy.voicediary.R;
 import com.ysy.voicediary.base.BaseActivity;
@@ -60,7 +62,24 @@ public class DiaryListActivity extends BaseActivity {
                 diaryList.add(diaryBeans.get(i));
             }
         }
+        sort();
         initRecycleView();
+    }
+
+    private void sort() {
+        List<DiaryBean> diaryListCopy = new ArrayList<>();
+        for (int i = 0; i < diaryList.size(); i++) {
+            if(diaryList.get(i).getPriority() == 1){
+                diaryListCopy.add(diaryList.get(i));
+            }
+        }
+        for (int i = 0; i < diaryList.size(); i++) {
+            if(diaryList.get(i).getPriority() == 0){
+                diaryListCopy.add(diaryList.get(i));
+            }
+        }
+        diaryList.clear();
+        diaryList.addAll(diaryListCopy);
     }
 
 
@@ -84,6 +103,13 @@ public class DiaryListActivity extends BaseActivity {
                 diaryList.add(diaryBeans.get(i));
             }
         }
+        sort();
         diaryAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
     }
 }
