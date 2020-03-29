@@ -32,7 +32,16 @@ public class ShareUtil {
                 .setCallback(shareListener)//回调监听器
                 .share();
     }
-
+    /**
+     * 分享
+     */
+    public static void shareText(Activity activity, SHARE_MEDIA platform,String content){
+        new ShareAction(activity)
+                .setPlatform(platform)//传入平台
+                .withText(content)//分享网址
+                .setCallback(shareListener)//回调监听器
+                .share();
+    }
     /**
      * 分享的回调
      */

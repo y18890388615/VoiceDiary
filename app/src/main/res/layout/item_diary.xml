@@ -6,6 +6,9 @@
     app:contentView="@+id/content"
     app:leftMenuView="@+id/left"
     app:rightMenuView="@+id/right"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <LinearLayout
         android:id="@+id/left"
@@ -13,6 +16,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/holo_blue_dark"
         android:orientation="horizontal"
+        android:gravity="center"
         android:padding="20dp">
         <TextView
             android:id="@+id/tv_share"
@@ -23,20 +27,38 @@
     <LinearLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#cccccc"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_bg_edit_stoke"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:elevation="2dp"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingLeft="@dimen/dp_10">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_16"
+                android:text="内容区域" />
+            <TextView
+                android:id="@+id/update_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:text="2020-03-22 12:13:13"
+                />
+        </LinearLayout>
         <TextView
-            android:id="@+id/tv_content"
+            android:id="@+id/tv_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="内容区域" />
-        <TextView
-            android:id="@+id/update_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2020-03-22 12:13:13"
+            android:textSize="12sp"
+            android:layout_marginTop="@dimen/dp_10"
             />
     </LinearLayout>
     <LinearLayout
@@ -51,6 +73,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/holo_blue_bright"
             android:padding="20dp"
+            android:gravity="center"
             android:text="删除" />
         <TextView
             android:id="@+id/tv_stick"
@@ -58,6 +81,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/holo_orange_dark"
             android:padding="20dp"
+            android:gravity="center"
             android:text="置顶" />
     </LinearLayout>
 </com.guanaj.easyswipemenulibrary.EasySwipeMenuLayout>

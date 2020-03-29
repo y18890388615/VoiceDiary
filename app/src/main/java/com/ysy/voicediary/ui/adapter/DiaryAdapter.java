@@ -29,7 +29,8 @@ public class DiaryAdapter extends BaseQuickAdapter<DiaryBean, BaseViewHolder> {
     @Override
     protected void convert(@NonNull BaseViewHolder helper, DiaryBean item) {
         helper.setText(R.id.tv_content, item.getTitle())
-                .setText(R.id.update_time, TimeUtils.millis2String(item.getUpdate_time()));
+                .setText(R.id.update_time, TimeUtils.millis2String(item.getUpdate_time()))
+                .setText(R.id.tv_address, item.getAddress());
         helper.setOnClickListener(R.id.content, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,6 +56,18 @@ public class DiaryAdapter extends BaseQuickAdapter<DiaryBean, BaseViewHolder> {
                 item.setPriority(item.getPriority() == 0 ? 1 : 0);
                 DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().update(item);
                 activity.onResume();
+            }
+        });
+        helper.setOnClickListener(R.id.left, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, item.getContent());
+                //切记需要使用Intent.createChooser，否则会出现别样的应用选择框，您可以试试
+                shareIntent = Intent.createChooser(shareIntent, item.getTitle());
+                activity.startActivity(shareIntent);
             }
         });
     }

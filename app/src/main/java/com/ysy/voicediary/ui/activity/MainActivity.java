@@ -1,15 +1,28 @@
 package com.ysy.voicediary.ui.activity;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -25,14 +38,20 @@ import com.ysy.voicediary.Constants;
 import com.ysy.voicediary.R;
 import com.ysy.voicediary.base.BaseActivity;
 import com.ysy.voicediary.bean.DiaryBean;
+import com.ysy.voicediary.bean.Section;
 import com.ysy.voicediary.utils.DataBaseUtil;
+import com.ysy.voicediary.utils.DialogUtil;
 import com.ysy.voicediary.utils.JsonParser;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +60,7 @@ import butterknife.OnClick;
 /**
  * 写日记
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements AMapLocationListener {
 
 
     @BindView(R.id.ed_input)
@@ -58,6 +77,12 @@ public class MainActivity extends BaseActivity {
     Button btComplete;
     @BindView(R.id.et_title)
     EditText etTitle;
+    @BindView(R.id.starBar)
+    RatingBar starBar;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
+    @BindView(R.id.rl_time)
+    RelativeLayout rlTime;
 
     // 语音听写对象
     private SpeechRecognizer mIat;
@@ -74,6 +99,10 @@ public class MainActivity extends BaseActivity {
 
     private long diary_id = -1;//日记id
 
+    private String address;//地址
+
+    private boolean isOK;//是否完成地址变蓝
+
     @Override
     public int getLayoutID() {
         return R.layout.activity_main;
@@ -82,15 +111,24 @@ public class MainActivity extends BaseActivity {
     @Override
     public void initView(Bundle savedInstanceState) {
         diary_type = getIntent().getIntExtra(Constants.DIARY_TYPE, 0);
+        if (diary_type == Constants.AFFAIRS) {//如果是待办，就要多重要级和时间
+            starBar.setVisibility(View.VISIBLE);
+            rlTime.setVisibility(View.VISIBLE);
+        } else {
+            starBar.setVisibility(View.INVISIBLE);
+            rlTime.setVisibility(View.GONE);
+        }
         //如果是修改
-        if(getIntent().getLongExtra(Constants.UPDATE_ID,-1) != -1){
-            diary_id = getIntent().getLongExtra(Constants.UPDATE_ID,-1);
+        if (getIntent().getLongExtra(Constants.UPDATE_ID, -1) != -1) {
+            diary_id = getIntent().getLongExtra(Constants.UPDATE_ID, -1);
             DiaryBean diaryBean = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().load(diary_id);
             etTitle.setText(diaryBean.getTitle());
             edInput.setText(diaryBean.getContent());
             updateTime.setText(TimeUtils.millis2String(diaryBean.getUpdate_time()));
-            tvTextLength.setText(diaryBean.getContent().length()+"字");
-        }else{
+            tvTextLength.setText(diaryBean.getContent().length() + "字");
+            starBar.setRating(diaryBean.getImportant());
+            tvTime.setText(diaryBean.getTime());//修改时间
+        } else {
             updateTime.setText(TimeUtils.getNowString());
         }
         edInput.addTextChangedListener(new TextWatcher() {
@@ -102,14 +140,70 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tvTextLength.setText(s.length() + "字");
+                if (edInput.length() >= 3 && !isOK) {
+                    if (edInput.getText().toString().contains("省") || edInput.getText().toString().contains("市")) {
+                        List<Section> sections = searchAllIndex(s.toString());
+                        SpannableString ss = new SpannableString(edInput.getText().toString());
+                        //设置0-2的字符颜色
+                        for(int i =0;i<sections.size();i++){
+//                            ss.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            ss.setSpan(new URLSpan("https://www.baidu.com/s?ie=UTF-8&wd="+
+                                            s.toString().substring(sections.get(i).start,sections.get(i).end)),
+                                    sections.get(i).start, sections.get(i).end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        }
+//                        //设置2-5的字符链接到电话簿，点击时触发拨号
+//                        ss.setSpan(new URLSpan("tel:4155551212"), 2, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        //设置9-11的字符为网络链接，点击时打开页面
+//                        //设置13-15的字符点击时，转到写短信的界面，发送对象为10086
+//                        ss.setSpan(new URLSpan("sms:10086"), 13, 15, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                        //粗体
+//                        ss.setSpan(new StyleSpan(Typeface.BOLD_ITALIC), 5, 7, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                        //斜体
+//                        ss.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), 7, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                        //下划线
+//                        ss.setSpan(new UnderlineSpan(), 10, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        //设置文本内容到textView
+                        isOK = true;
+                        edInput.setText(ss);
+                        //不添加这一句，拨号，http，发短信的超链接不能执行.
+                        edInput.setMovementMethod(LinkMovementMethod.getInstance());
+                        edInput.setSelection(edInput.getText().length());
+                    }
+                }else{
+                    isOK = false;
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
+
+    /**
+     * 查找省和市的位置
+     * @param str
+     * @return
+     */
+    private List<Section> searchAllIndex(String str) {
+        List<Section> sections = new ArrayList<>();
+        for(int i = 0;i<str.length();i++){
+            if("省".equals(String.valueOf(str.charAt(i)))){
+                int a = str.indexOf("省");//*第一个出现的索引位置
+                sections.add(new Section(a - 2, a + 1));
+            }else if("市".equals(String.valueOf(str.charAt(i)))){
+                int a = str.indexOf("市");//*第一个出现的索引位置
+                sections.add(new Section(a - 2, a + 1));
+            }
+        }
+        return sections;
+
+    }
+
+    //声明mlocationClient对象
+    public AMapLocationClient mlocationClient;
+    //声明mLocationOption对象
+    public AMapLocationClientOption mLocationOption = null;
 
     @Override
     public void initData() {
@@ -119,6 +213,23 @@ public class MainActivity extends BaseActivity {
         // 初始化听写Dialog，如果只使用有UI听写功能，无需创建SpeechRecognizer
         // 使用UI听写功能，请根据sdk文件目录下的notice.txt,放置布局文件和图片资源
         mIatDialog = new RecognizerDialog(this, mInitListener);
+        mlocationClient = new AMapLocationClient(this);
+        //初始化定位参数
+        mLocationOption = new AMapLocationClientOption();
+        //设置定位监听
+        mlocationClient.setLocationListener(this);
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+        //设置定位间隔,单位毫秒,默认为2000ms
+        mLocationOption.setInterval(2000);
+        //设置定位参数
+        mlocationClient.setLocationOption(mLocationOption);
+        // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
+        // 注意设置合适的定位时间的间隔（最小间隔支持为1000ms），并且在合适时间调用stopLocation()方法来取消定位请求
+        // 在定位结束后，在合适的生命周期调用onDestroy()方法
+        // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
+        //启动定位
+        mlocationClient.startLocation();
     }
 
     /**
@@ -135,7 +246,7 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-    @OnClick({R.id.bt_record, R.id.bt_complete})
+    @OnClick({R.id.bt_record, R.id.bt_complete, R.id.tv_time})
     public void onViewClicked(View view) {
         if (null == mIat) {
             // 创建单例失败，与 21001 错误为同样原因，参考 http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=9688
@@ -143,7 +254,7 @@ public class MainActivity extends BaseActivity {
             return;
         }
         switch (view.getId()) {
-            case R.id.bt_record:
+            case R.id.bt_record://语音录入
                 buffer.setLength(0);
                 // 设置参数
                 setParam();
@@ -173,24 +284,40 @@ public class MainActivity extends BaseActivity {
                     ToastUtils.showShort("请填写内容");
                     return;
                 }
-                if(getIntent().getLongExtra(Constants.UPDATE_ID,-1) != -1){
+                starBar.getNumStars();
+                if (getIntent().getLongExtra(Constants.UPDATE_ID, -1) != -1) {
                     DiaryBean diaryBean = new DiaryBean();
                     diaryBean.setDiaryId(diary_id);
                     diaryBean.setTitle(etTitle.getText().toString());
                     diaryBean.setContent(edInput.getText().toString());
                     diaryBean.setType(diary_type);
+                    diaryBean.setTime(tvTime.getText().toString());
+                    diaryBean.setImportant((int) starBar.getRating());
+                    diaryBean.setAddress(address);
                     diaryBean.setUpdate_time(TimeUtils.getNowMills());
                     DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().update(diaryBean);
-                }else{
+                } else {
                     DiaryBean diaryBean = new DiaryBean();
                     diaryBean.setTitle(etTitle.getText().toString());
                     diaryBean.setContent(edInput.getText().toString());
                     diaryBean.setType(diary_type);
+                    diaryBean.setTime(tvTime.getText().toString());
+                    diaryBean.setImportant((int) starBar.getRating());
                     diaryBean.setPriority(0);
+                    diaryBean.setAddress(address);
                     diaryBean.setUpdate_time(TimeUtils.getNowMills());
                     DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().insert(diaryBean);
                 }
                 finish();
+                break;
+            case R.id.tv_time://选择时间
+                DialogUtil.showDatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        tvTime.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+
+                    }
+                });
                 break;
         }
     }
@@ -225,13 +352,16 @@ public class MainActivity extends BaseActivity {
         mIat.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/iat.wav");
     }
 
+    private String save = "";
     /**
      * 听写UI监听器
      */
     private RecognizerDialogListener mRecognizerDialogListener = new RecognizerDialogListener() {
         public void onResult(RecognizerResult results, boolean isLast) {
             String text = JsonParser.parseIatResult(results.getResultString());
-
+            if (isLast) {
+                return;
+            }
             String sn = null;
             // 读取json结果中的sn字段
             try {
@@ -247,8 +377,11 @@ public class MainActivity extends BaseActivity {
             for (String key : mIatResults.keySet()) {
                 resultBuffer.append(mIatResults.get(key));
             }
-
-            edInput.setText(edInput.getText().toString() + resultBuffer.toString());
+            if (!save.equals(resultBuffer.toString())) {
+                edInput.setText(edInput.getText().toString() + resultBuffer.toString());
+                edInput.setSelection(edInput.getText().length());
+                save = resultBuffer.toString();
+            }
         }
 
         /**
@@ -265,6 +398,39 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    /**
+     * 地图对调
+     */
+    @Override
+    public void onLocationChanged(AMapLocation amapLocation) {
+        if (amapLocation != null) {
+            if (amapLocation.getErrorCode() == 0) {
+                //定位成功回调信息，设置相关消息
+                amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+                amapLocation.getLatitude();//获取纬度
+                amapLocation.getLongitude();//获取经度
+                amapLocation.getAccuracy();//获取精度信息
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = new Date(amapLocation.getTime());
+                df.format(date);//定位时间
+                address = amapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息。
+                amapLocation.getCountry();//国家信息
+                amapLocation.getProvince();//省信息
+                amapLocation.getCity();//城市信息
+                amapLocation.getDistrict();//城区信息
+                amapLocation.getStreet();//街道信息
+                amapLocation.getStreetNum();//街道门牌号信息
+                amapLocation.getCityCode();//城市编码
+                amapLocation.getAdCode();//地区编码
+            } else {
+                //显示错误信息ErrCode是错误码，errInfo是错误信息，详见错误码表。
+                Log.e("AmapError", "location Error, ErrCode:"
+                        + amapLocation.getErrorCode() + ", errInfo:"
+                        + amapLocation.getErrorInfo());
+            }
+        }
     }
 //    /**
 //     * 听写监听器。

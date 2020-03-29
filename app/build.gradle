@@ -61,4 +61,15 @@ dependencies {
     implementation files('src/libs/umeng-share-wechat-simplify-6.9.8.jar')
     implementation files('src/libs/umeng-shareboard-widget-6.9.8.jar')
     implementation files('src/libs/umeng-sharetool-6.9.8.jar')
+
+    //星星
+    implementation 'com.xl.ratingbar:ratingbar:0.1.1'
+
+    //弹窗
+    api 'com.lxj:xpopup:1.8.10-x'
+
+    //高德
+    api 'com.amap.api:3dmap:6.9.4'
+    api 'com.amap.api:search:6.9.0'
+    api 'com.amap.api:location:4.6.0'
 }
