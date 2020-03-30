@@ -72,4 +72,5 @@ dependencies {
     api 'com.amap.api:3dmap:6.9.4'
     api 'com.amap.api:search:6.9.0'
     api 'com.amap.api:location:4.6.0'
+
 }

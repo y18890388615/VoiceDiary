@@ -89,52 +89,60 @@
                 android:background="@drawable/shape_bg_edit_stoke"
                 />
         </RelativeLayout>
-
-        <EditText
-            android:id="@+id/ed_input"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="500dp"
-            android:layout_marginTop="@dimen/dp_10"
-            android:background="@drawable/shape_bg_edit_stoke"
-            android:gravity="top" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RatingBar
-                android:id="@+id/starBar"
-                android:layout_width="wrap_content"
-                android:numStars="3"
-                android:rating="1"
-                android:progressDrawable="@drawable/ratingbar"
-                android:layout_height="35dp"
-                android:stepSize="1"
-                android:layout_marginTop="@dimen/dp_40"/>
-            <Button
-                android:id="@+id/bt_complete"
-                android:layout_width="120dp"
-                android:layout_height="@dimen/dp_60"
-                android:background="@drawable/bg_button_blue"
-                android:text="完成"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="@dimen/dp_30"
-                android:textColor="@color/color_white"
-                android:textSize="18sp" />
+            android:layout_height="match_parent"
+            >
+            <EditText
+                android:id="@+id/ed_input"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_above="@+id/ll_botton"
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/shape_bg_edit_stoke"
+                android:gravity="top" />
             <LinearLayout
-                android:id="@+id/bt_record"
-                android:layout_width="@dimen/dp_50"
-                android:layout_height="@dimen/dp_50"
-                android:background="@drawable/shape_circle_blue"
-                android:layout_marginLeft="@dimen/dp_40"
-                android:layout_marginTop="@dimen/dp_30"
-                android:gravity="center">
+                android:id="@+id/ll_botton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+                <RatingBar
+                    android:id="@+id/starBar"
+                    android:layout_width="wrap_content"
+                    android:numStars="3"
+                    android:rating="1"
+                    android:progressDrawable="@drawable/ratingbar"
+                    android:layout_height="35dp"
+                    android:stepSize="1"
+                    android:layout_marginTop="@dimen/dp_40"/>
+                <Button
+                    android:id="@+id/bt_complete"
+                    android:layout_width="120dp"
+                    android:layout_height="@dimen/dp_60"
+                    android:background="@drawable/bg_button_blue"
+                    android:text="完成"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="@dimen/dp_30"
+                    android:textColor="@color/color_white"
+                    android:textSize="18sp" />
+                <LinearLayout
+                    android:id="@+id/bt_record"
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_50"
+                    android:background="@drawable/shape_circle_blue"
+                    android:layout_marginLeft="@dimen/dp_40"
+                    android:layout_marginTop="@dimen/dp_30"
+                    android:gravity="center">
 
-                <ImageView
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_30"
-                    android:src="@mipmap/voice" />
+                    <ImageView
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_30"
+                        android:src="@mipmap/voice" />
+                </LinearLayout>
+
             </LinearLayout>
+        </RelativeLayout>
 
-        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

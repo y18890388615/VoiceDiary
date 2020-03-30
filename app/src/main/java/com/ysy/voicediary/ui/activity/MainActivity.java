@@ -128,6 +128,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
             tvTextLength.setText(diaryBean.getContent().length() + "字");
             starBar.setRating(diaryBean.getImportant());
             tvTime.setText(diaryBean.getTime());//修改时间
+            setAddress(edInput.getText().toString());
         } else {
             updateTime.setText(TimeUtils.getNowString());
         }
@@ -140,20 +141,29 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 tvTextLength.setText(s.length() + "字");
-                if (edInput.length() >= 3 && !isOK) {
-                    if (edInput.getText().toString().contains("省") || edInput.getText().toString().contains("市")) {
-                        List<Section> sections = searchAllIndex(s.toString());
-                        SpannableString ss = new SpannableString(edInput.getText().toString());
-                        //设置0-2的字符颜色
-                        for(int i =0;i<sections.size();i++){
+                setAddress(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+    public void setAddress(String s){
+        if (edInput.length() >= 3 && !isOK) {
+            if (edInput.getText().toString().contains("省") || edInput.getText().toString().contains("市")) {
+                List<Section> sections = searchAllIndex(s.toString());
+                SpannableString ss = new SpannableString(edInput.getText().toString());
+                //设置0-2的字符颜色
+                for(int i =0;i<sections.size();i++){
 //                            ss.setSpan(new ForegroundColorSpan(Color.RED), 0, 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            ss.setSpan(new URLSpan("https://www.baidu.com/s?ie=UTF-8&wd="+
-                                            s.toString().substring(sections.get(i).start,sections.get(i).end)),
-                                    sections.get(i).start, sections.get(i).end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        }
+                    ss.setSpan(new URLSpan("https://www.baidu.com/s?ie=UTF-8&wd="+
+                                    s.toString().substring(sections.get(i).start,sections.get(i).end)),
+                            sections.get(i).start, sections.get(i).end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
 //                        //设置2-5的字符链接到电话簿，点击时触发拨号
 //                        ss.setSpan(new URLSpan("tel:4155551212"), 2, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        //设置9-11的字符为网络链接，点击时打开页面
+                //设置9-11的字符为网络链接，点击时打开页面
 //                        //设置13-15的字符点击时，转到写短信的界面，发送对象为10086
 //                        ss.setSpan(new URLSpan("sms:10086"), 13, 15, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //                        //粗体
@@ -162,24 +172,17 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
 //                        ss.setSpan(new StyleSpan(android.graphics.Typeface.ITALIC), 7, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //                        //下划线
 //                        ss.setSpan(new UnderlineSpan(), 10, 16, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        //设置文本内容到textView
-                        isOK = true;
-                        edInput.setText(ss);
-                        //不添加这一句，拨号，http，发短信的超链接不能执行.
-                        edInput.setMovementMethod(LinkMovementMethod.getInstance());
-                        edInput.setSelection(edInput.getText().length());
-                    }
-                }else{
-                    isOK = false;
-                }
+                //设置文本内容到textView
+                isOK = true;
+                edInput.setText(ss);
+                //不添加这一句，拨号，http，发短信的超链接不能执行.
+                edInput.setMovementMethod(LinkMovementMethod.getInstance());
+                edInput.setSelection(edInput.getText().length());
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+        }else{
+            isOK = false;
+        }
     }
-
     /**
      * 查找省和市的位置
      * @param str
@@ -405,6 +408,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
      */
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
+        LogUtils.d("test1", amapLocation.getLatitude()+","+amapLocation.getLongitude());
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
