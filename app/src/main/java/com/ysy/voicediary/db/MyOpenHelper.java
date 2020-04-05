@@ -27,6 +27,6 @@ public class MyOpenHelper extends DaoMaster.OpenHelper {
                         DaoMaster.dropAllTables(db, ifExists);
                     }
                 },
-                AccountBeanDao.class,DiaryBeanDao.class);
+                AccountBeanDao.class,DiaryBeanDao.class, TypeBeanDao.class);
     }
 }

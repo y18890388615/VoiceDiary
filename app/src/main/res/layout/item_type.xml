@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.guanaj.easyswipemenulibrary.EasySwipeMenuLayout
+    android:layout_width="match_parent"
+    android:layout_height="78dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:contentView="@+id/content"
+    app:rightMenuView="@+id/right"
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_bg_edit_stoke"
+        android:orientation="vertical"
+        android:elevation="2dp"
+        android:gravity="center">
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="内容区域" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/right"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@android:color/holo_red_light"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/holo_red_light"
+            android:padding="20dp"
+            android:textColor="@color/color_white"
+            android:gravity="center"
+            android:text="删除" />
+    </LinearLayout>
+</com.guanaj.easyswipemenulibrary.EasySwipeMenuLayout>

@@ -29,7 +29,7 @@ import butterknife.OnClick;
 public class DiaryListActivity extends BaseActivity {
     @BindView(R.id.recycleView)
     RecyclerView recycleView;
-    @BindView(R.id.ll_newDiary)
+    @BindView(R.id.ll_newType)
     LinearLayout llNewDiary;
     @BindView(R.id.tv_important)
     TextView tvImportant;
@@ -119,10 +119,10 @@ public class DiaryListActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.ll_newDiary, R.id.tv_important, R.id.tv_time})
+    @OnClick({R.id.ll_newType, R.id.tv_important, R.id.tv_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.ll_newDiary://创建新日记
+            case R.id.ll_newType://创建新日记
                 startActivity(new Intent(this, MainActivity.class).putExtra(Constants.DIARY_TYPE, diary_type));
                 break;
             case R.id.tv_important://重要级

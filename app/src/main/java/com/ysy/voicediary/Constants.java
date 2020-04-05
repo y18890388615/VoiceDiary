@@ -14,8 +14,8 @@ public class Constants {
 
     //日记类型
     public static final String DIARY_TYPE = "diary_type";
-    public static final int STUDY = 1;
-    public static final int AFFAIRS = 2;
-    public static final int LIFE = 3;
+    public static final int STUDY = -1;
+    public static final int AFFAIRS = -2;
+    public static final int LIFE = -3;
     public static final String UPDATE_ID = "update";
 }

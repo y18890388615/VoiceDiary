@@ -1,13 +1,22 @@
 package com.ysy.voicediary.ui.fragment;
 
-import android.content.Intent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ysy.voicediary.Constants;
 import com.ysy.voicediary.R;
 import com.ysy.voicediary.base.BaseFragment;
-import com.ysy.voicediary.ui.activity.DiaryListActivity;
+import com.ysy.voicediary.bean.TypeBean;
+import com.ysy.voicediary.ui.adapter.TypeAdapter;
+import com.ysy.voicediary.utils.DataBaseUtil;
+import com.ysy.voicediary.utils.DialogUtil;
+import com.ysy.voicediary.widget.dialog.NewTypeDialog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -16,12 +25,13 @@ import butterknife.OnClick;
  * 日记分类
  */
 public class ClassificationFragment extends BaseFragment {
-    @BindView(R.id.iv_study)
-    ImageView ivStudy;
-    @BindView(R.id.iv_affairs)
-    ImageView ivAffairs;
-    @BindView(R.id.iv_life)
-    ImageView ivLife;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.ll_newType)
+    LinearLayout llNewType;
+    private List<TypeBean> list = new ArrayList<>();
+    private TypeAdapter typeAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -35,20 +45,46 @@ public class ClassificationFragment extends BaseFragment {
 
     @Override
     protected void initData() {
+        initRecycleView();
+    }
+
+    private void setData() {
+        TypeBean typeBean = new TypeBean();
+        typeBean.setTypeId((long) Constants.STUDY);
+        typeBean.setTypeName("学习");
+        TypeBean typeBean2 = new TypeBean();
+        typeBean2.setTypeId((long) Constants.AFFAIRS);
+        typeBean2.setTypeName("待办事宜");
+        TypeBean typeBean3 = new TypeBean();
+        typeBean3.setTypeId((long) Constants.LIFE);
+        typeBean3.setTypeName("生活");
+        list.add(typeBean);
+        list.add(typeBean2);
+        list.add(typeBean3);
+    }
+
+    private void initRecycleView() {
+        List<TypeBean> typeBeans = DataBaseUtil.getInstance().getDaoSession().getTypeBeanDao().loadAll();
+        list.clear();
+        setData();
+        list.addAll(typeBeans);
+        typeAdapter = new TypeAdapter(R.layout.item_type, list, getActivity());
+        typeAdapter.openLoadAnimation();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setAdapter(typeAdapter);
 
     }
 
-    @OnClick({R.id.iv_study, R.id.iv_affairs, R.id.iv_life})
+    @OnClick({R.id.ll_newType})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_study://学习
-                startActivity(new Intent(getContext(), DiaryListActivity.class).putExtra(Constants.DIARY_TYPE, Constants.STUDY));
-                break;
-            case R.id.iv_affairs://待办事宜
-                startActivity(new Intent(getContext(), DiaryListActivity.class).putExtra(Constants.DIARY_TYPE, Constants.AFFAIRS));
-                break;
-            case R.id.iv_life://生活
-                startActivity(new Intent(getContext(), DiaryListActivity.class).putExtra(Constants.DIARY_TYPE, Constants.LIFE));
+            case R.id.ll_newType://新建类型
+                 DialogUtil.showNewTypeDialog(getContext(), new NewTypeDialog.OnClickListener() {
+                    @Override
+                    public void click() {
+                        initRecycleView();
+                    }
+                });
                 break;
         }
     }

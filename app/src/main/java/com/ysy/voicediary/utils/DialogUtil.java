@@ -6,6 +6,7 @@ import android.content.Context;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.lxj.xpopup.XPopup;
+import com.ysy.voicediary.widget.dialog.NewTypeDialog;
 import com.ysy.voicediary.widget.dialog.UpdatePWDDialog;
 
 import java.util.Calendar;
@@ -28,6 +29,15 @@ public class DialogUtil {
     public static void showUpdate(Context context) {
         new XPopup.Builder(context)
                 .asCustom(new UpdatePWDDialog(context))
+                .show();
+    }
+
+    /**
+     * 增加分类
+     */
+    public static void showNewTypeDialog(Context context, NewTypeDialog.OnClickListener onClickListener) {
+        new XPopup.Builder(context)
+                .asCustom(new NewTypeDialog(context, onClickListener))
                 .show();
     }
 }
