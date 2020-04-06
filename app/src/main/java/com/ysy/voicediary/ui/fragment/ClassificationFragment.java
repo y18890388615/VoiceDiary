@@ -68,7 +68,12 @@ public class ClassificationFragment extends BaseFragment {
         list.clear();
         setData();
         list.addAll(typeBeans);
-        typeAdapter = new TypeAdapter(R.layout.item_type, list, getActivity());
+        typeAdapter = new TypeAdapter(R.layout.item_type, list, getActivity(), new TypeAdapter.OnclickListener() {
+            @Override
+            public void delete() {
+                initRecycleView();
+            }
+        });
         typeAdapter.openLoadAnimation();
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(typeAdapter);
