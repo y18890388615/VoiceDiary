@@ -140,13 +140,16 @@ public class LoginActivity extends BaseActivity {
                 if (flag == Constants.LOGIN) {
                     if (etAccount.getText().toString().length() < 6) {
                         ToastUtils.showShort("账号长度小于6，请重新输入");
+                        return;
                     }
                     if (etPwd.getText().toString().length() < 6) {
-                        ToastUtils.showShort("账号长度小于6，请重新输入");
+                        ToastUtils.showShort("密码长度小于6，请重新输入");
+                        return;
                     }
                     List<AccountBean> accountBeans = accountBeanDao.loadAll();
                     if (accountBeans.size() == 0) {
                         ToastUtils.showShort("账号或密码错误");
+                        return;
                     }
                     for (int i = 0; i < accountBeans.size(); i++) {
                         String account = accountBeans.get(i).getAccount();
@@ -160,14 +163,20 @@ public class LoginActivity extends BaseActivity {
                             finish();
                             break;
                         }
+                        if(i == accountBeans.size()-1){
+                            ToastUtils.showShort("账号或密码错误");
+                        }
                     }
+
                     //注册
                 } else {
                     if (etAccount.getText().toString().length() < 6) {
                         ToastUtils.showShort("账号长度小于6，请重新输入");
+                        return;
                     }
                     if (etPwd.getText().toString().length() < 6) {
-                        ToastUtils.showShort("账号长度小于6，请重新输入");
+                        ToastUtils.showShort("密码长度小于6，请重新输入");
+                        return;
                     }
                     List<AccountBean> accountBeans = accountBeanDao.loadAll();
                     for (int i = 0; i < accountBeans.size(); i++) {

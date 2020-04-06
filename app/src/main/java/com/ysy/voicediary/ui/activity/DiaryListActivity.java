@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.umeng.socialize.UMShareAPI;
 import com.ysy.voicediary.Constants;
 import com.ysy.voicediary.R;
@@ -74,7 +75,8 @@ public class DiaryListActivity extends BaseActivity {
         diaryBeanDao = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao();
         List<DiaryBean> diaryBeans = diaryBeanDao.loadAll();
         for (int i = 0; i < diaryBeans.size(); i++) {
-            if (diary_type == diaryBeans.get(i).getType()) {
+            if (diary_type == diaryBeans.get(i).getType() && diaryBeans.get(i).getAccount().
+                    equals(SPUtils.getInstance().getString(Constants.ACCOUNT))) {
                 diaryList.add(diaryBeans.get(i));
             }
         }
@@ -149,7 +151,8 @@ public class DiaryListActivity extends BaseActivity {
         diaryBeanDao = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao();
         List<DiaryBean> diaryBeans = diaryBeanDao.loadAll();
         for (int i = 0; i < diaryBeans.size(); i++) {
-            if (diary_type == diaryBeans.get(i).getType()) {
+            if (diary_type == diaryBeans.get(i).getType() && diaryBeans.get(i).getAccount().
+                    equals(SPUtils.getInstance().getString(Constants.ACCOUNT))) {
                 diaryList.add(diaryBeans.get(i));
             }
         }

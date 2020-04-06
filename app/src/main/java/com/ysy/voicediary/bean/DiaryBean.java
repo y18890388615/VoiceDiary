@@ -16,6 +16,7 @@ public class DiaryBean {
     private int important;//重要级
     private String time;//如果是待办，就有处理时间
     private String address;//地址
+    private String account;//账号
 
 
     @Generated(hash = 1749744078)
@@ -23,10 +24,10 @@ public class DiaryBean {
     }
 
 
-    @Generated(hash = 849893240)
+    @Generated(hash = 170395636)
     public DiaryBean(Long diaryId, String content, long update_time, int type,
-            String title, int priority, int important, String time,
-            String address) {
+            String title, int priority, int important, String time, String address,
+            String account) {
         this.diaryId = diaryId;
         this.content = content;
         this.update_time = update_time;
@@ -36,6 +37,7 @@ public class DiaryBean {
         this.important = important;
         this.time = time;
         this.address = address;
+        this.account = account;
     }
 
 
@@ -115,6 +117,16 @@ public class DiaryBean {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+
+    public String getAccount() {
+        return this.account;
+    }
+
+
+    public void setAccount(String account) {
+        this.account = account;
     }
     
 

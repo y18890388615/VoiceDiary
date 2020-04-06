@@ -24,6 +24,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.iflytek.cloud.ErrorCode;
@@ -310,6 +311,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
                     diaryBean.setTime(tvTime.getText().toString());
                     diaryBean.setImportant((int) starBar.getRating());
                     diaryBean.setPriority(0);
+                    diaryBean.setAccount(SPUtils.getInstance().getString(Constants.ACCOUNT));
                     diaryBean.setAddress(address);
                     diaryBean.setUpdate_time(TimeUtils.getNowMills());
                     DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().insert(diaryBean);
