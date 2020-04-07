@@ -17,6 +17,7 @@ public class DiaryBean {
     private String time;//如果是待办，就有处理时间
     private String address;//地址
     private String account;//账号
+    private boolean isoOverdue;//如果是待办，有是否过期状态
 
 
     @Generated(hash = 1749744078)
@@ -24,10 +25,10 @@ public class DiaryBean {
     }
 
 
-    @Generated(hash = 170395636)
+    @Generated(hash = 1951808056)
     public DiaryBean(Long diaryId, String content, long update_time, int type,
             String title, int priority, int important, String time, String address,
-            String account) {
+            String account, boolean isoOverdue) {
         this.diaryId = diaryId;
         this.content = content;
         this.update_time = update_time;
@@ -38,6 +39,7 @@ public class DiaryBean {
         this.time = time;
         this.address = address;
         this.account = account;
+        this.isoOverdue = isoOverdue;
     }
 
 
@@ -127,6 +129,16 @@ public class DiaryBean {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+
+    public boolean getIsoOverdue() {
+        return this.isoOverdue;
+    }
+
+
+    public void setIsoOverdue(boolean isoOverdue) {
+        this.isoOverdue = isoOverdue;
     }
     
 
