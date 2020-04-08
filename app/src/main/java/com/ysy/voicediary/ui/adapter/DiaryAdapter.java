@@ -40,8 +40,17 @@ public class DiaryAdapter extends BaseQuickAdapter<DiaryBean, BaseViewHolder> {
         });
         if (item.getPriority() == 1) {
             helper.setText(R.id.tv_stick, "取消置顶");
-        }else{
+        } else {
             helper.setText(R.id.tv_stick, "置顶");
+        }
+        if (!item.getTime().equals("")) {
+            long nowMills = TimeUtils.getNowMills();
+            long oldMills = TimeUtils.string2Millis(item.getTime(), "yyyy-MM-dd");
+            if (oldMills < nowMills) {
+                helper.setBackgroundRes(R.id.content, R.drawable.shape_bg_gray);
+            }else{
+                helper.setBackgroundRes(R.id.content, R.drawable.shape_bg_edit_stoke);
+            }
         }
         helper.setOnClickListener(R.id.tv_delete, new View.OnClickListener() {
             @Override

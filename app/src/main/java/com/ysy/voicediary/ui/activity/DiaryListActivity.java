@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.SPUtils;
 import com.umeng.socialize.UMShareAPI;
 import com.ysy.voicediary.Constants;
 import com.ysy.voicediary.R;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 public class DiaryListActivity extends BaseActivity {
     @BindView(R.id.recycleView)
     RecyclerView recycleView;
-    @BindView(R.id.ll_newDiary)
+    @BindView(R.id.ll_newType)
     LinearLayout llNewDiary;
     @BindView(R.id.tv_important)
     TextView tvImportant;
@@ -74,7 +75,8 @@ public class DiaryListActivity extends BaseActivity {
         diaryBeanDao = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao();
         List<DiaryBean> diaryBeans = diaryBeanDao.loadAll();
         for (int i = 0; i < diaryBeans.size(); i++) {
-            if (diary_type == diaryBeans.get(i).getType()) {
+            if (diary_type == diaryBeans.get(i).getType() && diaryBeans.get(i).getAccount().
+                    equals(SPUtils.getInstance().getString(Constants.ACCOUNT))) {
                 diaryList.add(diaryBeans.get(i));
             }
         }
@@ -119,10 +121,10 @@ public class DiaryListActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.ll_newDiary, R.id.tv_important, R.id.tv_time})
+    @OnClick({R.id.ll_newType, R.id.tv_important, R.id.tv_time})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.ll_newDiary://创建新日记
+            case R.id.ll_newType://创建新日记
                 startActivity(new Intent(this, MainActivity.class).putExtra(Constants.DIARY_TYPE, diary_type));
                 break;
             case R.id.tv_important://重要级
@@ -149,7 +151,8 @@ public class DiaryListActivity extends BaseActivity {
         diaryBeanDao = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao();
         List<DiaryBean> diaryBeans = diaryBeanDao.loadAll();
         for (int i = 0; i < diaryBeans.size(); i++) {
-            if (diary_type == diaryBeans.get(i).getType()) {
+            if (diary_type == diaryBeans.get(i).getType() && diaryBeans.get(i).getAccount().
+                    equals(SPUtils.getInstance().getString(Constants.ACCOUNT))) {
                 diaryList.add(diaryBeans.get(i));
             }
         }
