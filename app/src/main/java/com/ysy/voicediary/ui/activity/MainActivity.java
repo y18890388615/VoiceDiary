@@ -301,12 +301,6 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
                     diaryBean.setUpdate_time(TimeUtils.getNowMills());
                     DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().update(diaryBean);
                 } else {
-                    if(diary_type == Constants.AFFAIRS){
-                        if(tvTime.getText().toString().equals("")){
-                            ToastUtils.showShort("请填写日期");
-                            return;
-                        }
-                    }
                     DiaryBean diaryBean = new DiaryBean();
                     diaryBean.setTitle(etTitle.getText().toString());
                     diaryBean.setContent(edInput.getText().toString());
@@ -317,6 +311,13 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
                     diaryBean.setAccount(SPUtils.getInstance().getString(Constants.ACCOUNT));
                     diaryBean.setAddress(address);
                     diaryBean.setUpdate_time(TimeUtils.getNowMills());
+                    if(diary_type == Constants.AFFAIRS){
+                        if(tvTime.getText().toString().equals("")){
+                            ToastUtils.showShort("请填写日期");
+                            return;
+                        }
+                        diaryBean.setIsoOverdue(false);
+                    }
                     DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().insert(diaryBean);
                 }
                 finish();

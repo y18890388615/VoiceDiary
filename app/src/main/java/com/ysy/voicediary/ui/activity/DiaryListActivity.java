@@ -107,12 +107,17 @@ public class DiaryListActivity extends BaseActivity {
             }
         }
         for (int i = 0; i < diaryList.size(); i++) {
-            if (diaryList.get(i).getPriority() == 1) {
+            if (diaryList.get(i).getPriority() == 1 && !diaryList.get(i).getIsoOverdue()) {
                 diaryListCopy.add(diaryList.get(i));
             }
         }
         for (int i = 0; i < diaryList.size(); i++) {
-            if (diaryList.get(i).getPriority() == 0) {
+            if (diaryList.get(i).getPriority() == 0 && !diaryList.get(i).getIsoOverdue()) {
+                diaryListCopy.add(diaryList.get(i));
+            }
+        }
+        for (int i = 0; i < diaryList.size(); i++) {
+            if (diaryList.get(i).getIsoOverdue()) {
                 diaryListCopy.add(diaryList.get(i));
             }
         }

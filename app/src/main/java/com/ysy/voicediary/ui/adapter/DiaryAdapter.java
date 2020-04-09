@@ -31,6 +31,27 @@ public class DiaryAdapter extends BaseQuickAdapter<DiaryBean, BaseViewHolder> {
         helper.setText(R.id.tv_content, item.getTitle())
                 .setText(R.id.update_time, TimeUtils.millis2String(item.getUpdate_time()))
                 .setText(R.id.tv_address, item.getAddress());
+        //如果不是代办，就不显示完成按钮
+        if (item.getType() != Constants.AFFAIRS) {
+            helper.getView(R.id.tv_overdue).setVisibility(View.GONE);
+            helper.setBackgroundRes(R.id.content, R.drawable.shape_bg_edit_stoke);
+        } else {
+            if (!item.getIsoOverdue()) {
+                helper.setBackgroundRes(R.id.content, R.drawable.shape_bg_edit_stoke);
+                helper.getView(R.id.tv_overdue).setVisibility(View.VISIBLE);
+            } else {
+                helper.getView(R.id.tv_overdue).setVisibility(View.GONE);
+                helper.setBackgroundRes(R.id.content, R.drawable.shape_bg_gray);
+            }
+        }
+        helper.setOnClickListener(R.id.tv_overdue, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                item.setIsoOverdue(true);
+                DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().update(item);
+                activity.onResume();
+            }
+        });
         helper.setOnClickListener(R.id.content, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,15 +63,6 @@ public class DiaryAdapter extends BaseQuickAdapter<DiaryBean, BaseViewHolder> {
             helper.setText(R.id.tv_stick, "取消置顶");
         } else {
             helper.setText(R.id.tv_stick, "置顶");
-        }
-        if (!item.getTime().equals("")) {
-            long nowMills = TimeUtils.getNowMills();
-            long oldMills = TimeUtils.string2Millis(item.getTime(), "yyyy-MM-dd");
-            if (oldMills < nowMills) {
-                helper.setBackgroundRes(R.id.content, R.drawable.shape_bg_gray);
-            }else{
-                helper.setBackgroundRes(R.id.content, R.drawable.shape_bg_edit_stoke);
-            }
         }
         helper.setOnClickListener(R.id.tv_delete, new View.OnClickListener() {
             @Override
