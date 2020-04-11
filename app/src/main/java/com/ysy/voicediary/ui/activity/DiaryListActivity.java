@@ -10,7 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.umeng.socialize.UMShareAPI;
 import com.ysy.voicediary.Constants;
 import com.ysy.voicediary.R;
@@ -92,13 +94,12 @@ public class DiaryListActivity extends BaseActivity {
         if (sortType == IMPORTANT_SORT) {
             SortListUtil.sort(diaryList, "important", "desc");
         } else if (sortType == TIME_SORT) {
+            LogUtils.d("test1", "jinle");
             for (int i = 0; i < diaryList.size(); i++) {
                 for (int j = diaryList.size() - 1; j > 0; j--) {
-                    String[] split = diaryList.get(j).getTime().split("-");
-                    String[] split2 = diaryList.get(j - 1).getTime().split("-");
-                    if (Integer.valueOf(split[0]) > Integer.valueOf(split2[0]) ||
-                            Integer.valueOf(split[1]) > Integer.valueOf(split2[1]) ||
-                            Integer.valueOf(split[2]) > Integer.valueOf(split2[2])) {
+                    long time1 = TimeUtils.string2Millis(diaryList.get(j).getTime(), "yyyy-MM-dd");
+                    long time2 = TimeUtils.string2Millis(diaryList.get(j-1).getTime(), "yyyy-MM-dd");
+                    if (time1 > time2) {
                         DiaryBean diaryBean = diaryList.get(j);
                         diaryList.set(j, diaryList.get(j - 1));
                         diaryList.set(j - 1, diaryBean);
@@ -156,8 +157,8 @@ public class DiaryListActivity extends BaseActivity {
         diaryBeanDao = DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao();
         List<DiaryBean> diaryBeans = diaryBeanDao.loadAll();
         for (int i = 0; i < diaryBeans.size(); i++) {
-            if (diary_type == diaryBeans.get(i).getType() && diaryBeans.get(i).getAccount().
-                    equals(SPUtils.getInstance().getString(Constants.ACCOUNT))) {
+            if (diary_type == diaryBeans.get(i).getType() && SPUtils.getInstance().getString(Constants.ACCOUNT).
+                    equals(diaryBeans.get(i).getAccount())) {
                 diaryList.add(diaryBeans.get(i));
             }
         }

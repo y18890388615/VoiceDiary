@@ -298,6 +298,7 @@ public class MainActivity extends BaseActivity implements AMapLocationListener {
                     diaryBean.setTime(tvTime.getText().toString());
                     diaryBean.setImportant((int) starBar.getRating());
                     diaryBean.setAddress(address);
+                    diaryBean.setAccount(SPUtils.getInstance().getString(Constants.ACCOUNT));
                     diaryBean.setUpdate_time(TimeUtils.getNowMills());
                     DataBaseUtil.getInstance().getDaoSession().getDiaryBeanDao().update(diaryBean);
                 } else {
